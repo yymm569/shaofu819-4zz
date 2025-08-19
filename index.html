@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>安全提示 | 继续访问</title>
+    <meta name="color-scheme" content="light dark" />
+    <style>
+      :root {
+        --bg: #f6f7fb;
+        --surface: #ffffff;
+        --text: #1b1e27;
+        --muted: #6b7280;
+        --accent: #2563eb;
+        --accent-2: #1d4ed8;
+        --ok: #16a34a;
+        --ring: rgba(37, 99, 235, 0.18);
+        --radius: 16px;
+        --shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --bg: #0f1115;
+          --surface: #151821;
+          --text: #e5e7eb;
+          --muted: #9aa1af;
+          --accent: #3b82f6;
+          --accent-2: #60a5fa;
+          --ring: rgba(59, 130, 246, 0.25);
+          --shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+        }
+      }
+      html,
+      body {
+        height: 100%;
+      }
+      body {
+        margin: 0;
+        background: radial-gradient(
+            1200px 800px at 10% -10%,
+            rgba(37, 99, 235, 0.06),
+            transparent 60%
+          ),
+          radial-gradient(
+            1200px 800px at 110% 10%,
+            rgba(16, 185, 129, 0.06),
+            transparent 60%
+          ),
+          var(--bg);
+        color: var(--text);
+        font: 16px/1.6 system-ui, -apple-system, Segoe UI, Roboto, Helvetica,
+          Arial, PingFang SC, Microsoft YaHei, sans-serif;
+      }
+      .wrap {
+        min-height: 100%;
+        display: grid;
+        place-items: center;
+        padding: 24px;
+      }
+      .card {
+        width: min(560px, 100%);
+        background: var(--surface);
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+        border: 1px solid rgba(0, 0, 0, 0.06);
+        overflow: hidden;
+      }
+      .hero {
+        padding: 26px 26px 0;
+      }
+      h1 {
+        margin: 0 0 6px;
+        font-size: 22px;
+        letter-spacing: 0.2px;
+      }
+      p.sub {
+        margin: 0 0 14px;
+        color: var(--muted);
+        font-size: 14px;
+      }
+      .panel {
+        display: flex;
+        gap: 16px;
+        align-items: center;
+        padding: 18px 20px;
+        border-top: 1px dashed rgba(0, 0, 0, 0.06);
+      }
+      .btn {
+        position: relative;
+        appearance: none;
+        border: none;
+        border-radius: 999px;
+        padding: 14px 22px 14px 56px;
+        background: linear-gradient(180deg, var(--accent), var(--accent-2));
+        color: #fff;
+        font-weight: 600;
+        cursor: pointer;
+        box-shadow: 0 6px 20px rgba(37, 99, 235, 0.35);
+        outline: none;
+        user-select: none;
+        -webkit-tap-highlight-color: transparent;
+        transition: transform 0.05s ease;
+        touch-action: manipulation;
+      }
+      .btn:active {
+        transform: scale(0.985);
+      }
+      .btn[aria-disabled="true"] {
+        opacity: 0.7;
+        filter: saturate(0.8);
+        cursor: default;
+      }
+      .prog {
+        position: absolute;
+        left: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 32px;
+        height: 32px;
+      }
+      .hint {
+        color: var(--muted);
+        font-size: 13px;
+        margin-left: auto;
+      }
+      .footer {
+        padding: 14px 20px 18px;
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        color: var(--muted);
+        font-size: 12px;
+      }
+      .badge {
+        font-size: 12px;
+        padding: 4px 8px;
+        border-radius: 999px;
+        background: #eef2ff;
+        color: #3730a3;
+      }
+      @media (prefers-color-scheme: dark) {
+        .badge {
+          background: rgba(59, 130, 246, 0.15);
+          color: #c7d2fe;
+        }
+      }
+      .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <div
+        class="card"
+        role="dialog"
+        aria-labelledby="t-title"
+        aria-describedby="t-sub"
+      >
+        <div class="hero">
+          <h1 id="t-title">安全提示</h1>
+          <p id="t-sub" class="sub">
+            为确认是人工访问，请<span class="badge">长按 1 秒</span
+            >下方按钮以继续。
+          </p>
+        </div>
+
+        <div class="panel">
+          <button
+            id="enterBtn"
+            class="btn"
+            aria-pressed="false"
+            aria-disabled="false"
+          >
+            <svg class="prog" viewBox="0 0 44 44" aria-hidden="true">
+              <circle
+                cx="22"
+                cy="22"
+                r="19"
+                fill="none"
+                stroke="rgba(255,255,255,.35)"
+                stroke-width="4"
+              />
+              <circle
+                id="pbar"
+                cx="22"
+                cy="22"
+                r="19"
+                fill="none"
+                stroke="white"
+                stroke-width="4"
+                stroke-linecap="round"
+                stroke-dasharray="119.38"
+                stroke-dashoffset="119.38"
+              />
+            </svg>
+            长按进入
+          </button>
+          <div class="hint" aria-live="polite" id="msg">
+            按住不放，直到进度完成
+          </div>
+          <span class="sr-only" id="sr">请长按按钮一秒以继续</span>
+        </div>
+
+        <div class="footer">
+          <div>若误拦截，请返回上一页重试或稍后再试。</div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      (() => {
+        const btn = document.getElementById("enterBtn");
+        const msg = document.getElementById("msg");
+        const pbar = document.getElementById("pbar");
+        const sr = document.getElementById("sr");
+
+        // 配置
+        const HOLD_MS = 1000; // 长按时长
+        const TARGET_URL =
+          new URLSearchParams(location.search).get("to") ||
+          document.currentScript.getAttribute("data-target") ||
+          "https://yymm569.github.io/shaofu819-4/"; // 修改为你的落地页，或用 ?to= 传参
+        const EASING = (t) => t; // 可改为更柔和的缓动
+
+        let t0 = 0;
+        let raf = 0;
+        let holding = false;
+        let completed = false;
+
+        const C = 2 * Math.PI * 19; // 圆周长 ≈ 119.38
+
+        function setProgress(ratio) {
+          const r = Math.max(0, Math.min(1, ratio));
+          pbar.style.strokeDashoffset = String(C * (1 - r));
+        }
+
+        function startHold() {
+          if (completed) return;
+          holding = true;
+          btn.setAttribute("aria-pressed", "true");
+          msg.textContent = "保持按住…";
+          sr.textContent = "正在检测长按";
+          t0 = performance.now();
+          tick();
+          // 轻微的触觉提示（支持的设备）
+          try {
+            window.navigator.vibrate && window.navigator.vibrate(10);
+          } catch {}
+        }
+
+        function endHold() {
+          if (completed) return;
+          holding = false;
+          btn.setAttribute("aria-pressed", "false");
+          cancelAnimationFrame(raf);
+          setProgress(0);
+          msg.textContent = "按住不放，直到进度完成";
+          sr.textContent = "长按已取消";
+        }
+
+        function tick(now) {
+          raf = requestAnimationFrame(tick);
+          const dt = now - t0 || 0;
+          const ratio = EASING(Math.min(1, dt / HOLD_MS));
+          setProgress(ratio);
+          if (ratio >= 1) {
+            finish();
+          }
+        }
+
+        function finish() {
+          completed = true;
+          cancelAnimationFrame(raf);
+          setProgress(1);
+          msg.textContent = "验证完成，正在进入…";
+          btn.setAttribute("aria-disabled", "true");
+          try {
+            window.navigator.vibrate && window.navigator.vibrate([8, 30, 8]);
+          } catch {}
+          // 小延时以展示完成状态
+          setTimeout(() => {
+            location.replace(TARGET_URL);
+          }, 150);
+        }
+
+        // 事件绑定（移动端 + PC）
+        const startEvts = ["touchstart", "mousedown", "pointerdown"];
+        const endEvts = [
+          "touchend",
+          "touchcancel",
+          "mouseup",
+          "mouseleave",
+          "pointerup",
+          "pointercancel",
+          "contextmenu",
+          "scroll",
+        ];
+
+        startEvts.forEach((ev) =>
+          btn.addEventListener(
+            ev,
+            (e) => {
+              // 避免双触发
+              if (e.type === "touchstart") {
+                e.preventDefault();
+              }
+              startHold();
+            },
+            { passive: false }
+          )
+        );
+
+        endEvts.forEach((ev) => {
+          // 在窗口层面监听，避免手指移出按钮仍保持状态
+          window.addEventListener(ev, endHold, { passive: true });
+        });
+
+        // 禁止长按菜单，避免与“长按”冲突
+        window.addEventListener(
+          "contextmenu",
+          (e) => {
+            e.preventDefault();
+          },
+          { passive: false }
+        );
+
+        // 额外：键盘无障碍支持（回车/空格 = 逐步加时）
+        btn.addEventListener("keydown", (e) => {
+          if (e.code === "Enter" || e.code === "Space") {
+            startHold();
+          }
+        });
+        btn.addEventListener("keyup", (e) => {
+          if (e.code === "Enter" || e.code === "Space") {
+            endHold();
+          }
+        });
+
+        // 如果用户通过 ?to= 传参，校准为绝对 URL（防止相对路径解析异常）
+        try {
+          const to = new URL(TARGET_URL, location.href).href;
+          if (to) {
+            /* valid */
+          }
+        } catch {
+          console.warn("无效的 to 参数，使用默认地址");
+        }
+      })();
+    </script>
+  </body>
+</html>
